@@ -1,9 +1,7 @@
-File: reservasi.html
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Form Reservasi - SiLas</title>
   <link rel="stylesheet" href="style.css" />
@@ -96,7 +94,7 @@ File: reservasi.html
     <div id="estimasi" class="estimasi" style="display:none;"></div>
 
     <button onclick="submitReservasi()">Kirim Reservasi</button>
-    <button class="btn-back" onclick="window.location.href='index.html'">⬅️ Kembali ke Dasbor</button>
+    <button class="btn-back" onclick="window.location.href='index.html'">⬅ Kembali ke Dasbor</button>
   </div>
 
   <script>
@@ -174,23 +172,34 @@ File: reservasi.html
       const estimasiMin = min * ukuran;
       const estimasiMax = max * ukuran;
 
+      const user = JSON.parse(localStorage.getItem("user")) || {};
       const pesananBaru = {
         kategori,
         jenis,
         ukuran,
         catatan,
         estimasi: `Rp ${estimasiMin.toLocaleString()} – Rp ${estimasiMax.toLocaleString()}`,
-        status: "Dipesan"
+        status: "Dipesan",
+        nama: user.nama || "Anonim",
+        alamat: user.alamat || "-"
       };
 
       const daftar = JSON.parse(localStorage.getItem("pesanan")) || [];
       daftar.push(pesananBaru);
       localStorage.setItem("pesanan", JSON.stringify(daftar));
 
+      const params = new URLSearchParams({
+        noPesanan: `INV${daftar.length}`,
+        estimasi: pesananBaru.estimasi,
+        nama: pesananBaru.nama,
+        alamat: pesananBaru.alamat
+      });
+
       alert("Reservasi berhasil ditambahkan.");
-      window.location.href = "pembayaran.html";
+      window.location.href = "pembayaran.html?" + params.toString();
     }
 
+    // Auto isi kategori & jenis jika ada di URL
     const params = new URLSearchParams(window.location.search);
     const kategoriURL = params.get('kategori');
     const jenisURL = params.get('jenis');

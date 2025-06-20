@@ -1,6 +1,6 @@
-// script.js
-
-// Cek status login user di setiap halaman (kecuali login & register)
+// ========================
+// CEK LOGIN DI SEMUA HALAMAN (kecuali login & register)
+// ========================
 if (!window.location.href.includes("login") && !window.location.href.includes("register")) {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) {
@@ -9,7 +9,9 @@ if (!window.location.href.includes("login") && !window.location.href.includes("r
   }
 }
 
-// Fungsi logout global
+// ========================
+// LOGOUT GLOBAL
+// ========================
 function logout() {
   if (confirm("Yakin ingin logout?")) {
     localStorage.removeItem("user");
@@ -17,21 +19,28 @@ function logout() {
   }
 }
 
-// Tampilkan data user di halaman akun
+// ========================
+// TAMPILKAN PROFIL USER DI HALAMAN AKUN
+// ========================
 function tampilkanProfil() {
   const user = JSON.parse(localStorage.getItem("user"));
   if (!user) return;
+
   const users = JSON.parse(localStorage.getItem("users")) || [];
-  const data = users.find(u => u.email === user.email);
+  const data = users.find(u => u.email === user.email && u.password === user.password);
+
   if (data) {
     document.getElementById("user-nama").textContent = data.nama || "-";
     document.getElementById("user-email").textContent = data.email || "-";
-    if (document.getElementById("user-alamat"))
+    if (document.getElementById("user-alamat")) {
       document.getElementById("user-alamat").textContent = data.alamat || "-";
+    }
   }
 }
 
-// Simpan data pembayaran
+// ========================
+// UPLOAD PEMBAYARAN & SIMPAN KE localStorage
+// ========================
 function uploadPembayaran() {
   const noPesanan = document.getElementById("noPesanan").value.trim();
   const bank = document.getElementById("bank").value;
@@ -42,18 +51,35 @@ function uploadPembayaran() {
     return;
   }
 
-  alert("Pembayaran berhasil dikonfirmasi otomatis!");
-  window.location.href = "status-pembayaran.html";
+  const pembayarans = JSON.parse(localStorage.getItem("pembayaran")) || [];
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    pembayarans.push({
+      noPesanan,
+      bank,
+      bukti: e.target.result,
+      waktu: new Date().toLocaleString()
+    });
+
+    localStorage.setItem("pembayaran", JSON.stringify(pembayarans));
+    alert("Pembayaran berhasil dikonfirmasi otomatis!");
+    window.location.href = "status-pembayaran.html";
+  };
+  reader.readAsDataURL(bukti);
 }
 
-// Preview gambar bukti transfer
+// ========================
+// PREVIEW GAMBAR
+// ========================
 function previewGambar() {
   const file = document.getElementById("bukti").files[0];
   const preview = document.getElementById("preview");
+
   if (file) {
     const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.innerHTML = `<img src="${e.target.result}" alt="Bukti Pembayaran" />`;
+    reader.onload = function(e) {
+      preview.innerHTML = `<img src="${e.target.result}" alt="Bukti Pembayaran" style="max-width: 100%; height: auto;" />`;
     };
     reader.readAsDataURL(file);
   } else {
@@ -61,10 +87,13 @@ function previewGambar() {
   }
 }
 
-// Tampilkan rekening berdasarkan bank
+// ========================
+// TAMPILKAN NOMOR REKENING
+// ========================
 function tampilkanRekening() {
   const bank = document.getElementById("bank").value;
   const rekeningDiv = document.getElementById("rekening");
+
   const nomorRekening = {
     BCA: "123-456-7890 a.n. SiLas Workshop",
     BRI: "9876-5432-1001 a.n. SiLas Lasindo",

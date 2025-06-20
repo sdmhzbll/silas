@@ -8,13 +8,32 @@
   <style>
     body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; }
     header { background-color: #1e40af; color: white; padding: 1rem; text-align: center; }
-    .container { max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+    .container {
+      max-width: 500px; margin: 2rem auto; background: white;
+      padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
     label { display: block; margin-top: 1rem; font-weight: bold; }
-    input, select { width: 100%; padding: 0.6rem; margin-top: 0.25rem; border-radius: 6px; border: 1px solid #ccc; }
-    .preview, .rekening { margin-top: 1rem; padding: 1rem; background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 6px; color: #065f46; }
-    .preview img { max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    button { width: 100%; padding: 0.75rem; margin-top: 1.5rem; background: #16a34a; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
-    .btn-kembali { background-color: #1e40af; margin-top: 1rem; }
+    input, select {
+      width: 100%; padding: 0.6rem; margin-top: 0.25rem;
+      border-radius: 6px; border: 1px solid #ccc;
+    }
+    .preview, .rekening, .pelanggan {
+      margin-top: 1rem; padding: 1rem;
+      background: #f0fdf4; border: 1px solid #a7f3d0;
+      border-radius: 6px; color: #065f46;
+    }
+    .preview img {
+      max-width: 100%; border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      width: 100%; padding: 0.75rem; margin-top: 1.5rem;
+      background: #16a34a; color: white; border: none;
+      border-radius: 8px; font-size: 16px; cursor: pointer;
+    }
+    .btn-kembali {
+      background-color: #1e40af; margin-top: 1rem;
+    }
     .btn-kembali:hover { background-color: #1e3a8a; }
   </style>
 </head>
@@ -25,8 +44,10 @@
   </header>
 
   <div class="container">
+    <div class="pelanggan" id="info-pelanggan" style="display: none;"></div>
+
     <label for="noPesanan">Nomor Pesanan</label>
-    <input type="text" id="noPesanan" placeholder="Contoh: INV001" />
+    <input type="text" id="noPesanan" readonly />
 
     <label for="bank">Transfer ke Bank</label>
     <select id="bank" onchange="tampilkanRekening()">
@@ -39,13 +60,14 @@
 
     <div id="rekening" class="rekening" style="display:none;"></div>
 
+    <div class="preview" id="previewEstimasi" style="display:none;"></div>
+
     <label for="bukti">Upload Bukti Transfer</label>
     <input type="file" id="bukti" accept="image/*" onchange="previewGambar()" />
-
     <div class="preview" id="preview"></div>
 
     <button onclick="uploadPembayaran()">Kirim Pembayaran</button>
-    <button class="btn-kembali" onclick="window.location.href='index.html'">⬅️ Kembali ke Beranda</button>
+    <button class="btn-kembali" onclick="window.location.href='index.html'">⬅ Kembali ke Beranda</button>
   </div>
 
   <script>
@@ -102,16 +124,23 @@
       const params = new URLSearchParams(window.location.search);
       const noPesanan = params.get('noPesanan');
       const estimasi = params.get('estimasi');
+      const nama = params.get('nama');
+      const alamat = params.get('alamat');
 
       if (noPesanan) {
         document.getElementById("noPesanan").value = noPesanan;
       }
 
       if (estimasi) {
-        const preview = document.createElement("div");
-        preview.className = "preview";
-        preview.innerHTML = `<strong>Total Estimasi:</strong><br>${estimasi}`;
-        document.querySelector(".container").insertBefore(preview, document.getElementById("rekening"));
+        const est = document.getElementById("previewEstimasi");
+        est.innerHTML = `<strong>Total Estimasi:</strong><br>${estimasi}`;
+        est.style.display = "block";
+      }
+
+      if (nama && alamat) {
+        const info = document.getElementById("info-pelanggan");
+        info.innerHTML = `<strong>Nama Pelanggan:</strong> ${nama}<br><strong>Alamat:</strong> ${alamat}`;
+        info.style.display = "block";
       }
     };
   </script>
