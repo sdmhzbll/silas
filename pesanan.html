@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daftar Pesanan - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #f1f5f9; margin: 0; padding: 0; }
+    header { background: #1e40af; color: white; padding: 1rem; text-align: center; }
+    .container { max-width: 900px; margin: 2rem auto; padding: 2rem; background: white; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.75rem; text-align: left; border: 1px solid #ccc; }
+    th { background-color: #e0f2fe; }
+    .badge { padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: bold; }
+    .badge.dipesan { background-color: #e0f2fe; color: #1e3a8a; }
+    .badge.diproses { background-color: #fff7cd; color: #9a3412; }
+    .badge.selesai { background-color: #d1fae5; color: #065f46; }
+    .btn-kembali, .btn-tambah { margin-top: 1.5rem; display: block; width: 100%; padding: 0.75rem; font-size: 1rem; background-color: #1e40af; color: white; border: none; border-radius: 8px; cursor: pointer; text-align: center; }
+    .btn-hapus { background: #dc2626; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; }
+    .btn-bayar { background: #16a34a; color: white; padding: 6px 12px; border: none; border-radius: 6px; cursor: pointer; margin-left: 6px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Pesanan Anda - SiLas</h1>
+  </header>
+
+  <div class="container">
+    <table>
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Kategori</th>
+          <th>Jenis</th>
+          <th>Ukuran</th>
+          <th>Estimasi</th>
+          <th>Status</th>
+          <th>Aksi</th>
+        </tr>
+      </thead>
+      <tbody id="tabel-pesanan"></tbody>
+    </table>
+
+    <button class="btn-tambah" onclick="window.location.href='reservasi.html'">➕ Tambah Pesanan Baru</button>
+    <button class="btn-kembali" onclick="window.location.href='index.html'">⬅️ Kembali ke Beranda</button>
+  </div>
+
+  <script>
+    function tampilkanPesanan() {
+      const tbody = document.getElementById("tabel-pesanan");
+      const pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+      tbody.innerHTML = "";
+
+      if (pesanan.length === 0) {
+        tbody.innerHTML = "<tr><td colspan='7' style='text-align:center;'>Belum ada pesanan</td></tr>";
+        return;
+      }
+
+      pesanan.forEach((p, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${p.kategori}</td>
+          <td>${p.jenis}</td>
+          <td>${p.ukuran}</td>
+          <td>${p.estimasi}</td>
+          <td><span class="badge ${p.status.toLowerCase()}">${p.status}</span></td>
+          <td>
+            <button class="btn-hapus" onclick="hapusPesanan(${i})">Hapus</button>
+            <button class="btn-bayar" onclick="bayarPesanan(${i})">Bayar</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function hapusPesanan(index) {
+      if (confirm("Yakin ingin menghapus pesanan ini?")) {
+        const pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+        pesanan.splice(index, 1);
+        localStorage.setItem("pesanan", JSON.stringify(pesanan));
+        tampilkanPesanan();
+      }
+    }
+
+    function bayarPesanan(index) {
+      const pesanan = JSON.parse(localStorage.getItem("pesanan")) || [];
+      const p = pesanan[index];
+      const query = new URLSearchParams({
+        noPesanan: `INV${index + 1}`,
+        estimasi: p.estimasi
+      }).toString();
+      window.location.href = `pembayaran.html?${query}`;
+    }
+
+    tampilkanPesanan();
+  </script>
+
+</body>
+</html>

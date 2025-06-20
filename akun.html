@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil Akun - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f1f5f9;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+    .info {
+      margin-top: 1rem;
+      background: #f8fafc;
+      padding: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .info p {
+      margin: 0.5rem 0;
+      font-size: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .btn-edit { background: #2563eb; color: white; }
+    .btn-password { background: #f59e0b; color: white; }
+    .btn-logout { background: #dc2626; color: white; }
+    .btn-back { background: #1e40af; color: white; }
+    .btn-back:hover { background: #1e3a8a; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Profil Pengguna - SiLas</h1>
+  </header>
+
+  <div class="container">
+    <h2>Data Akun Anda</h2>
+
+    <div class="info">
+      <p><strong>Nama:</strong> <span id="user-nama">-</span></p>
+      <p><strong>Email:</strong> <span id="user-email">-</span></p>
+      <p><strong>Alamat:</strong> <span id="user-alamat">-</span></p>
+    </div>
+
+    <button class="btn-edit" onclick="window.location.href='edit-profil.html'">Ubah Profil</button>
+    <button class="btn-password" onclick="window.location.href='ganti-password.html'">Ganti Password</button>
+    <button class="btn-logout" onclick="logout()">Logout</button>
+    <button class="btn-back" onclick="window.location.href='index.html'">⬅️ Kembali ke Beranda</button>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    const allUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (!user) {
+      alert("Silakan login terlebih dahulu.");
+      window.location.href = "login.html";
+    } else {
+      const asli = allUsers.find(u => u.email === user.email && u.password === user.password);
+      if (!asli) {
+        alert("Akun tidak valid.");
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      } else {
+        document.getElementById("user-nama").textContent = asli.nama;
+        document.getElementById("user-email").textContent = asli.email;
+        document.getElementById("user-alamat").textContent = asli.alamat || "-";
+      }
+    }
+
+    function logout() {
+      if (confirm("Yakin ingin logout?")) {
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar Akun - SiLas</title>
+  <style>
+    body {
+      background: #f1f5f9;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .register-box {
+      max-width: 420px;
+      background: white;
+      margin: 5rem auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #1e3a8a;
+    }
+    label {
+      display: block;
+      margin-bottom: .25rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: .6rem;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      background: #1e40af;
+      color: white;
+      padding: .75rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1e3a8a;
+    }
+    p {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 14px;
+    }
+    a {
+      color: #1e40af;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="style.css" />
+<body>
+
+  <div class="register-box">
+    <h2>Buat Akun Baru</h2>
+
+    <label for="nama">Nama Lengkap</label>
+    <input type="text" id="nama" placeholder="Masukkan nama lengkap" />
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Masukkan email" />
+
+    <label for="password">Password</label>
+    <input type="password" id="password" placeholder="Masukkan password" />
+
+    <button onclick="register()">Daftar</button>
+
+    <p>Sudah punya akun? <a href="login.html">Login di sini</a></p>
+  </div>
+
+  <script>
+    function register() {
+      const nama = document.getElementById("nama").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+
+      if (!nama || !email || !password) {
+        alert("Semua kolom wajib diisi.");
+        return;
+      }
+
+      const users = JSON.parse(localStorage.getItem("users")) || [];
+
+      if (users.some(u => u.email === email)) {
+        alert("Email sudah terdaftar.");
+        return;
+      }
+
+      const newUser = { nama, email, password };
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+
+      alert("Registrasi berhasil! Silakan login.");
+      window.location.href = "login.html";
+    }
+  </script>
+
+</body>
+</html>

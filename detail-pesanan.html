@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detail Pesanan - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>Detail Pesanan Anda</h1>
+  </header>
+
+  <div class="container">
+    <table>
+      <tr><th>Nomor Pesanan</th><td>INV001</td></tr>
+      <tr><th>Nama Pemesan</th><td>Andi Pratama</td></tr>
+      <tr><th>Email</th><td>andi@gmail.com</td></tr>
+      <tr><th>Kategori Layanan</th><td>Pembuatan Baru</td></tr>
+      <tr><th>Jenis Pekerjaan</th><td>Pagar Minimalis Besi Hollow</td></tr>
+      <tr><th>Ukuran</th><td>3 Meter</td></tr>
+      <tr><th>Catatan</th><td>Pagar depan rumah ukuran 3m warna hitam</td></tr>
+      <tr><th>Estimasi Biaya</th><td>Rp 1.050.000 – Rp 2.100.000</td></tr>
+      <tr><th>Status</th><td><span class="badge dipesan">Dipesan</span></td></tr>
+    </table>
+
+    <button class="btn-primary" onclick="window.print()">🖨️ Cetak Bukti</button>
+    <button class="btn-warning" onclick="window.history.back()">🔙 Kembali</button>
+  </div>
+
+</body>
+</html>

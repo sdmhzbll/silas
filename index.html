@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h2 {
+      color: #1e3a8a;
+      margin-bottom: 2rem;
+    }
+    .nav-menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+    }
+    .nav-menu a {
+      display: block;
+      text-decoration: none;
+      background: #1e40af;
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      font-weight: bold;
+      transition: background 0.2s ease-in-out;
+    }
+    .nav-menu a:hover {
+      background: #1e3a8a;
+    }
+    .logout-btn {
+      margin-top: 2rem;
+      padding: 0.75rem 2rem;
+      background: #dc2626;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .logout-btn:hover {
+      background: #b91c1c;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>SiLas - Sistem Informasi Layanan Las</h1>
+  </header>
+
+  <div class="container">
+    <h2 id="selamat-datang">Selamat datang!</h2>
+
+    <div class="nav-menu">
+      <a href="layanan.html">🔧 Layanan</a>
+      <a href="reservasi.html">📋 Reservasi</a>
+      <a href="pesanan.html">📦 Pesanan</a>
+      <a href="pembayaran.html">💳 Pembayaran</a>
+      <a href="status-pembayaran.html">📌 Status Pembayaran</a>
+      <a href="cetak.html">🖨️ Cetak Bukti</a>
+      <a href="whatsapp.html">💬 WhatsApp</a>
+      <a href="akun.html">👤 Akun</a>
+    </div>
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+      alert("Silakan login terlebih dahulu.");
+      window.location.href = "login.html";
+    } else {
+      document.getElementById("selamat-datang").textContent = `Selamat datang, ${user.nama}!`;
+    }
+
+    function logout() {
+      if (confirm("Yakin ingin logout?")) {
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+      }
+    }
+  </script>
+
+</body>
+</html>

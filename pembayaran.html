@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upload Pembayaran - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #f1f5f9; margin: 0; padding: 0; }
+    header { background-color: #1e40af; color: white; padding: 1rem; text-align: center; }
+    .container { max-width: 500px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+    label { display: block; margin-top: 1rem; font-weight: bold; }
+    input, select { width: 100%; padding: 0.6rem; margin-top: 0.25rem; border-radius: 6px; border: 1px solid #ccc; }
+    .preview, .rekening { margin-top: 1rem; padding: 1rem; background: #f0fdf4; border: 1px solid #a7f3d0; border-radius: 6px; color: #065f46; }
+    .preview img { max-width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+    button { width: 100%; padding: 0.75rem; margin-top: 1.5rem; background: #16a34a; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+    .btn-kembali { background-color: #1e40af; margin-top: 1rem; }
+    .btn-kembali:hover { background-color: #1e3a8a; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Upload Bukti Pembayaran</h1>
+  </header>
+
+  <div class="container">
+    <label for="noPesanan">Nomor Pesanan</label>
+    <input type="text" id="noPesanan" placeholder="Contoh: INV001" />
+
+    <label for="bank">Transfer ke Bank</label>
+    <select id="bank" onchange="tampilkanRekening()">
+      <option value="">-- Pilih Bank --</option>
+      <option value="BCA">BCA</option>
+      <option value="BRI">BRI</option>
+      <option value="Mandiri">Mandiri</option>
+      <option value="BNI">BNI</option>
+    </select>
+
+    <div id="rekening" class="rekening" style="display:none;"></div>
+
+    <label for="bukti">Upload Bukti Transfer</label>
+    <input type="file" id="bukti" accept="image/*" onchange="previewGambar()" />
+
+    <div class="preview" id="preview"></div>
+
+    <button onclick="uploadPembayaran()">Kirim Pembayaran</button>
+    <button class="btn-kembali" onclick="window.location.href='index.html'">⬅️ Kembali ke Beranda</button>
+  </div>
+
+  <script>
+    const nomorRekening = {
+      BCA: "123-456-7890 a.n. SiLas Workshop",
+      BRI: "9876-5432-1001 a.n. SiLas Lasindo",
+      Mandiri: "140-001-999-1234 a.n. CV. SiLas Mandiri",
+      BNI: "041-1234567890 a.n. PT. SiLas Teknindo"
+    };
+
+    function tampilkanRekening() {
+      const bank = document.getElementById("bank").value;
+      const rekeningDiv = document.getElementById("rekening");
+
+      if (nomorRekening[bank]) {
+        rekeningDiv.innerHTML = `<strong>Nomor Rekening:</strong><br>${nomorRekening[bank]}`;
+        rekeningDiv.style.display = "block";
+      } else {
+        rekeningDiv.innerHTML = "";
+        rekeningDiv.style.display = "none";
+      }
+    }
+
+    function previewGambar() {
+      const file = document.getElementById("bukti").files[0];
+      const preview = document.getElementById("preview");
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.innerHTML = `<img src="${e.target.result}" alt="Bukti Pembayaran" />`;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.innerHTML = "";
+      }
+    }
+
+    function uploadPembayaran() {
+      const noPesanan = document.getElementById("noPesanan").value.trim();
+      const bank = document.getElementById("bank").value;
+      const bukti = document.getElementById("bukti").files[0];
+
+      if (!noPesanan || !bank || !bukti) {
+        alert("Semua data harus diisi dan bukti harus dipilih.");
+        return;
+      }
+
+      alert("Pembayaran berhasil dikonfirmasi otomatis!");
+      window.location.href = "status-pembayaran.html";
+    }
+
+    window.onload = function() {
+      const params = new URLSearchParams(window.location.search);
+      const noPesanan = params.get('noPesanan');
+      const estimasi = params.get('estimasi');
+
+      if (noPesanan) {
+        document.getElementById("noPesanan").value = noPesanan;
+      }
+
+      if (estimasi) {
+        const preview = document.createElement("div");
+        preview.className = "preview";
+        preview.innerHTML = `<strong>Total Estimasi:</strong><br>${estimasi}`;
+        document.querySelector(".container").insertBefore(preview, document.getElementById("rekening"));
+      }
+    };
+  </script>
+
+</body>
+</html>

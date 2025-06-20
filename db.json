@@ -1,0 +1,42 @@
+{
+  "users": [
+    {
+      "nama": "Hilmi Alghifari",
+      "email": "hilmi@example.com",
+      "password": "123456",
+      "alamat": "Jl. Sukamaju No. 10, Bandung"
+    },
+    {
+      "nama": "Rani Putri",
+      "email": "rani@example.com",
+      "password": "123456",
+      "alamat": "Jl. Melati Raya No. 5, Jakarta"
+    }
+  ],
+  "pesanan": [
+    {
+      "id": 1,
+      "kategori": "Pembuatan Baru",
+      "jenis": "Pagar Minimalis Besi Hollow",
+      "ukuran": 3,
+      "estimasi": "Rp 1.050.000 – Rp 2.100.000",
+      "status": "Dipesan"
+    },
+    {
+      "id": 2,
+      "kategori": "Perbaikan",
+      "jenis": "Cat ulang pagar",
+      "ukuran": 4,
+      "estimasi": "Rp 300.000 – Rp 600.000",
+      "status": "Diproses"
+    }
+  ],
+  "pembayaran": [
+    {
+      "id": 1,
+      "noPesanan": "INV001",
+      "bank": "BCA",
+      "bukti": "bukti1.jpg"
+    }
+  ]
+}

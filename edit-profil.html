@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ubah Profil - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #f1f5f9;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: 3rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.25rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 1.5rem;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Ubah Profil</h1>
+  </header>
+
+  <div class="container">
+    <h2>Edit Data Akun</h2>
+
+    <label for="nama">Nama Lengkap</label>
+    <input type="text" id="nama" placeholder="Nama" />
+
+    <label for="email">Email</label>
+    <input type="email" id="email" placeholder="Email" />
+
+    <label for="alamat">Alamat</label>
+    <input type="text" id="alamat" placeholder="Contoh: Jl. Raya No. 10, Bandung" />
+
+    <button onclick="updateProfil()">Simpan Perubahan</button>
+  </div>
+
+  <script>
+    const user = JSON.parse(localStorage.getItem("user"));
+    let users = JSON.parse(localStorage.getItem("users")) || [];
+
+    if (!user) {
+      alert("Silakan login terlebih dahulu.");
+      window.location.href = "login.html";
+    }
+
+    const namaInput = document.getElementById("nama");
+    const emailInput = document.getElementById("email");
+    const alamatInput = document.getElementById("alamat");
+
+    namaInput.value = user.nama;
+    emailInput.value = user.email;
+    alamatInput.value = user.alamat || "";
+
+    function updateProfil() {
+      const namaBaru = namaInput.value.trim();
+      const emailBaru = emailInput.value.trim().toLowerCase();
+      const alamatBaru = alamatInput.value.trim();
+
+      if (!namaBaru || !emailBaru || !alamatBaru) {
+        alert("Nama, email, dan alamat tidak boleh kosong.");
+        return;
+      }
+
+      // Cek apakah email baru sudah dipakai akun lain
+      const emailSudahAda = users.find(u => u.email === emailBaru && u.email !== user.email);
+      if (emailSudahAda) {
+        alert("Email sudah digunakan akun lain.");
+        return;
+      }
+
+      // Update data user
+      users = users.map(u => {
+        if (u.email === user.email && u.password === user.password) {
+          return { ...u, nama: namaBaru, email: emailBaru, alamat: alamatBaru };
+        }
+        return u;
+      });
+
+      // Simpan perubahan
+      const userBaru = { ...user, nama: namaBaru, email: emailBaru, alamat: alamatBaru };
+      localStorage.setItem("users", JSON.stringify(users));
+      localStorage.setItem("user", JSON.stringify(userBaru));
+
+      alert("Profil berhasil diperbarui.");
+      window.location.href = "akun.html";
+    }
+  </script>
+
+</body>
+</html>

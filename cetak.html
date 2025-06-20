@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cetak Bukti Pesanan - SiLas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    h2, h3 {
+      text-align: center;
+      color: #1e3a8a;
+    }
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+    }
+    td {
+      padding: 0.5rem;
+    }
+    th {
+      text-align: left;
+      background: #f1f5f9;
+      padding: 0.5rem;
+    }
+    .btn-print {
+      display: block;
+      margin: 2rem auto;
+      padding: 1rem 2rem;
+      background: #1e40af;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .footer {
+      margin-top: 2rem;
+      font-size: 12px;
+      text-align: center;
+      color: #555;
+    }
+
+    @media print {
+      .btn-print { display: none; }
+      body { margin: 0; }
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="style.css" />
+<body>
+
+  <div class="container">
+    <h2>BUKTI PEMESANAN & PEMBAYARAN</h2>
+    <h3>SiLas - Sistem Informasi Layanan Las</h3>
+
+    <table>
+      <tr><th>Nomor Pesanan</th><td>INV001</td></tr>
+      <tr><th>Nama Pelanggan</th><td>Andi Pratama</td></tr>
+      <tr><th>Email</th><td>andi@gmail.com</td></tr>
+      <tr><th>Kategori</th><td>Pembuatan Baru</td></tr>
+      <tr><th>Jenis Pekerjaan</th><td>Pagar Hollow</td></tr>
+      <tr><th>Ukuran</th><td>3 Meter</td></tr>
+      <tr><th>Estimasi Biaya</th><td>Rp 1.050.000 – Rp 2.100.000</td></tr>
+      <tr><th>Status</th><td>✅ Sudah Dibayar</td></tr>
+    </table>
+
+    <button class="btn-print" onclick="window.print()">🖨️ Cetak Sekarang</button>
+
+    <div class="footer">
+      <p>Dicetak otomatis oleh sistem SiLas</p>
+      <p>Tanggal Cetak: <span id="tglCetak"></span></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("tglCetak").textContent = new Date().toLocaleString("id-ID");
+  </script>
+
+</body>
+</html>

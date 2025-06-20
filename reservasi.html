@@ -1,0 +1,209 @@
+File: reservasi.html
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Reservasi - SiLas</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      background: white;
+      margin: 2rem auto;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-bottom: .25rem;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    select, input, textarea {
+      width: 100%;
+      padding: .6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      background: #1e40af;
+      color: white;
+      padding: .75rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .btn-back {
+      background-color: #6b7280;
+      margin-top: 1rem;
+    }
+    .estimasi {
+      margin-top: 1rem;
+      background: #ecfdf5;
+      padding: 1rem;
+      border: 1px solid #a7f3d0;
+      border-radius: 6px;
+      color: #065f46;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Form Reservasi - SiLas</h1>
+  </header>
+
+  <div class="container">
+    <label for="kategori">Kategori Layanan</label>
+    <select id="kategori" onchange="loadJenis()">
+      <option value="">-- Pilih Kategori --</option>
+      <option value="pembuatan">Pembuatan Baru</option>
+      <option value="perbaikan">Perbaikan</option>
+      <option value="modifikasi">Modifikasi</option>
+      <option value="konsultasi">Survei & Konsultasi</option>
+    </select>
+
+    <label for="jenis">Jenis Pekerjaan</label>
+    <select id="jenis" onchange="hitungEstimasi()">
+      <option value="">-- Pilih Jenis --</option>
+    </select>
+
+    <label for="ukuran">Ukuran (meter/m²/unit)</label>
+    <input type="number" id="ukuran" placeholder="Contoh: 3" oninput="hitungEstimasi()" min="1" />
+
+    <label for="catatan">Catatan Tambahan</label>
+    <textarea id="catatan" rows="3" placeholder="Contoh: lokasi Bandung, pagar warna hitam"></textarea>
+
+    <div id="estimasi" class="estimasi" style="display:none;"></div>
+
+    <button onclick="submitReservasi()">Kirim Reservasi</button>
+    <button class="btn-back" onclick="window.location.href='index.html'">⬅️ Kembali ke Dasbor</button>
+  </div>
+
+  <script>
+    const dataLayanan = {
+      pembuatan: {
+        "Pagar Minimalis Besi Hollow": [350000, 700000],
+        "Pagar Tempa / Ornamen": [750000, 1200000],
+        "Kanopi baja ringan": [250000, 400000],
+        "Pagar Geser (Sliding)": [900000, 1500000],
+        "Kanopi (Besi + Galvalum)": [350000, 500000],
+        "Teralis Jendela": [300000, 600000],
+        "Teralis Pintu": [500000, 1000000],
+        "Railing Tangga / Balkon": [350000, 700000],
+        "Meja / Rak Besi Custom": [500000, 1500000]
+      },
+      perbaikan: {
+        "Perbaikan pagar penyok": [150000, 400000],
+        "Cat ulang pagar": [75000, 150000]
+      },
+      modifikasi: {
+        "Ubah tinggi pagar": [300000, 600000],
+        "Tambah ornamen pagar": [100000, 300000]
+      },
+      konsultasi: {
+        "Survei lokasi": [50000, 100000],
+        "DP pekerjaan": [100000, 500000]
+      }
+    };
+
+    function loadJenis() {
+      const kategori = document.getElementById("kategori").value;
+      const jenisSelect = document.getElementById("jenis");
+      jenisSelect.innerHTML = "<option value=''>-- Pilih Jenis --</option>";
+
+      if (dataLayanan[kategori]) {
+        for (let jenis in dataLayanan[kategori]) {
+          const opt = document.createElement("option");
+          opt.value = jenis;
+          opt.textContent = jenis;
+          jenisSelect.appendChild(opt);
+        }
+      }
+
+      document.getElementById("estimasi").style.display = "none";
+    }
+
+    function hitungEstimasi() {
+      const kategori = document.getElementById("kategori").value;
+      const jenis = document.getElementById("jenis").value;
+      const ukuran = parseFloat(document.getElementById("ukuran").value);
+
+      if (!kategori || !jenis || isNaN(ukuran)) return;
+
+      const [min, max] = dataLayanan[kategori][jenis];
+      const estimasiMin = min * ukuran;
+      const estimasiMax = max * ukuran;
+
+      document.getElementById("estimasi").innerHTML =
+        `<strong>Estimasi Harga:</strong><br>Rp ${estimasiMin.toLocaleString()} – Rp ${estimasiMax.toLocaleString()}`;
+      document.getElementById("estimasi").style.display = "block";
+    }
+
+    function submitReservasi() {
+      const kategori = document.getElementById("kategori").value;
+      const jenis = document.getElementById("jenis").value;
+      const ukuran = parseFloat(document.getElementById("ukuran").value);
+      const catatan = document.getElementById("catatan").value;
+
+      if (!kategori || !jenis || isNaN(ukuran)) {
+        alert("Harap lengkapi semua data terlebih dahulu.");
+        return;
+      }
+
+      const [min, max] = dataLayanan[kategori][jenis];
+      const estimasiMin = min * ukuran;
+      const estimasiMax = max * ukuran;
+
+      const pesananBaru = {
+        kategori,
+        jenis,
+        ukuran,
+        catatan,
+        estimasi: `Rp ${estimasiMin.toLocaleString()} – Rp ${estimasiMax.toLocaleString()}`,
+        status: "Dipesan"
+      };
+
+      const daftar = JSON.parse(localStorage.getItem("pesanan")) || [];
+      daftar.push(pesananBaru);
+      localStorage.setItem("pesanan", JSON.stringify(daftar));
+
+      alert("Reservasi berhasil ditambahkan.");
+      window.location.href = "pembayaran.html";
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const kategoriURL = params.get('kategori');
+    const jenisURL = params.get('jenis');
+
+    if (kategoriURL && dataLayanan[kategoriURL.toLowerCase()]) {
+      document.getElementById("kategori").value = kategoriURL.toLowerCase();
+      loadJenis();
+      setTimeout(() => {
+        document.getElementById("jenis").value = jenisURL;
+        hitungEstimasi();
+      }, 300);
+    }
+  </script>
+
+</body>
+</html>

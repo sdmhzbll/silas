@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kirim WhatsApp - SiLas</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f1f5f9;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #1e40af;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 2rem auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-top: 0.25rem;
+    }
+    button {
+      margin-top: 2rem;
+      width: 100%;
+      padding: 0.75rem;
+      background: #25d366;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<link rel="stylesheet" href="style.css" />
+<body>
+
+  <header>
+    <h1>Kirim Pesanan ke WhatsApp</h1>
+  </header>
+
+  <div class="container">
+    <label for="nama">Nama Anda</label>
+    <input type="text" id="nama" placeholder="Contoh: Andi" />
+
+    <label for="jenis">Jenis Layanan</label>
+    <input type="text" id="jenis" placeholder="Contoh: Pagar Hollow" />
+
+    <label for="ukuran">Ukuran / Keterangan</label>
+    <input type="text" id="ukuran" placeholder="Contoh: 3 Meter, warna hitam" />
+
+    <label for="catatan">Catatan Tambahan</label>
+    <textarea id="catatan" rows="3" placeholder="Contoh: lokasi di Bandung, harap survei hari Minggu"></textarea>
+
+    <button onclick="kirimWhatsApp()">Kirim via WhatsApp</button>
+  </div>
+
+  <script>
+    function kirimWhatsApp() {
+      const nama = document.getElementById("nama").value.trim();
+      const jenis = document.getElementById("jenis").value.trim();
+      const ukuran = document.getElementById("ukuran").value.trim();
+      const catatan = document.getElementById("catatan").value.trim();
+
+      if (!nama || !jenis || !ukuran) {
+        alert("Isi minimal nama, jenis layanan, dan ukuran.");
+        return;
+      }
+
+      const pesan = `Halo Admin SiLas,%0ASaya ingin melakukan reservasi layanan dengan data berikut:%0A
+Nama: ${nama}%0A
+Jenis Layanan: ${jenis}%0A
+Ukuran/Keterangan: ${ukuran}%0A
+Catatan: ${catatan}%0A
+Mohon konfirmasinya, terima kasih.`;
+
+      const nomorAdmin = "6281234567890"; // Ganti dengan nomor WA Admin
+      const link = `https://wa.me/${nomorAdmin}?text=${pesan}`;
+      window.open(link, '_blank');
+    }
+  </script>
+
+</body>
+</html>
